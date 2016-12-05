@@ -1,5 +1,5 @@
 import store from '../../store';
-import { START_GAME, ADD_TO_TEAM, PROPOSE_TEAM, VOTE_ON_TEAM, VOTE_ON_QUEST, SCORE_AND_END_QUEST } from '../../constants';
+import { START_GAME, ADD_TO_TEAM, PROPOSE_TEAM, VOTE_ON_TEAM, SCORE_TEAM_VOTES, VOTE_ON_QUEST, SCORE_AND_END_QUEST } from '../../constants';
 
 
 // -------------------------- DEFAULTS --------------------------
@@ -108,8 +108,6 @@ const initializeQuests = ({ game: { rules: { numberOfPlayers } } }) => {
     }
   });
 
-  console.log('QUESTS FROM INITIALIZATION', Object.assign({}, DEFAULT_QUESTS, _QUESTS))
-
   return Object.assign({}, DEFAULT_QUESTS, _QUESTS);
 };
 
@@ -126,19 +124,32 @@ function addPlayerToTeam(quests, player) {
 };
 
 function addVoteToTeam (quests, voteType) {
-  console.log('quests on state when voting', quests)
   const _QUESTS = Object.assign({}, quests);
   const _QNUMBER = _QUESTS.currentQuest;
   const _CURTEAM = _QUESTS[_QNUMBER].team;
   const fieldToUpdate = voteType ? 'successVotes' : 'failVotes';
 
-  console.log('++++++++++++++++ _QUESTS before reassign', _QUESTS);
-
   _QUESTS[_QNUMBER].team = Object.assign({}, _CURTEAM, {
     [fieldToUpdate]: ++_CURTEAM[fieldToUpdate]
   });
 
-  console.log('_QUESTS', _QUESTS);
+  return _QUESTS;
+};
+
+function tallyTeamVotes (quests) {
+  const _QUESTS = Object.assign({}, quests);
+  const _QNUMBER = _QUESTS.currentQuest;
+  const _CURTEAM = _QUESTS[_QNUMBER].team;
+
+  const didSucceed = _CURTEAM.successVotes > _CURTEAM.failVotes;
+
+  if (!didSucceed) {
+    _QUESTS[_QNUMBER].teamFails = ++_QUESTS[_QNUMBER].teamFails;
+    // move to next leader, reset team
+    // if teamFails === 5, evil wins!
+  };
+  
+  _QUESTS[_QNUMBER].team = Object.assign({}, _CURTEAM, { didSucceed });
 
   return _QUESTS;
 };
@@ -163,10 +174,7 @@ function tallyQuestAndContinue (quests) {
   const didSucceed = _CURQUEST.failVotes < _CURQUEST.numberOfFailsNeeded;
   const gameScoreToUpdate = didSucceed ? 'loyalScore' : 'evilScore';
 
-  _QUESTS[_QNUMBER] = Object.assign({}, _CURQUEST, {
-    didSucceed
-  });
-  
+  _QUESTS[_QNUMBER] = Object.assign({}, _CURQUEST, { didSucceed });
   _QUESTS[gameScoreToUpdate] = ++_QUESTS[gameScoreToUpdate];
   
   if (_QUESTS.currentQuest < 5) {
@@ -192,6 +200,10 @@ export const voteOnTeam = (voteType) => ({
   voteType
 });
 
+export const scoreTeamVotes = () => ({
+  type: SCORE_TEAM_VOTES,
+});
+
 export const voteOnQuest = (voteType) => ({
   type: VOTE_ON_QUEST,
   voteType
@@ -209,13 +221,15 @@ export default (state = DEFAULT_QUESTS, action) => {
     // All quests
     case START_GAME: return initializeQuests(store.getState());
 
+
     // Current quest's team
     case ADD_TO_TEAM: return addPlayerToTeam(state, action.player);  // local
     // case PROPOSE_TEAM: return Object.assign({}, state, {  // fb
     //   team: action.team
     // });
     case VOTE_ON_TEAM: return addVoteToTeam(state, action.voteType);
-    // case SCORE_TEAM_VOTES:
+    case SCORE_TEAM_VOTES: return tallyTeamVotes(state);
+
 
     // Current quest
     case VOTE_ON_QUEST: return addVoteToQuests(state, action.voteType);

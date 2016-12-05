@@ -6,5 +6,6 @@ export const START_GAME = 'START_GAME';
 export const ADD_TO_TEAM = 'ADD_TO_TEAM';
 export const PROPOSE_TEAM = 'PROPOSE_TEAM';
 export const VOTE_ON_TEAM = 'VOTE_ON_TEAM';
+export const SCORE_TEAM_VOTES = 'SCORE_TEAM_VOTES';
 export const VOTE_ON_QUEST = 'VOTE_ON_QUEST';
 export const SCORE_AND_END_QUEST = 'SCORE_AND_END_QUEST';
