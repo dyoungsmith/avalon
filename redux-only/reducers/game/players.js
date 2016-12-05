@@ -1,6 +1,5 @@
 import { _ } from 'underscore';
 import store from '../../store';
-import { initializeLady } from './rules';
 import { ADD_PLAYER_TO_GAME, START_GAME } from '../../constants';
 
 // -------------------------- DEFAULTS --------------------------

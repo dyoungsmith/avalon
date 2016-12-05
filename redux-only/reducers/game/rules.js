@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import store from '../../store';
-import { ADD_PLAYER_TO_GAME, TOGGLE_OPTIONAL, INITIALIZE_LADY } from '../../constants';
+import { ADD_PLAYER_TO_GAME, TOGGLE_OPTIONAL, START_GAME } from '../../constants';
 
 
 // -------------------------- DEFAULTS --------------------------
@@ -9,7 +9,7 @@ const DEFAULT_CHARACTERS = {
   percival: false,
   morgana: false,
   oberon: false,
-  ladyOfTheLake: {}
+  ladyOfTheLake: 0
 };
 
 // -------------------------- HELPERS --------------------------
@@ -17,9 +17,9 @@ function setFirstLady ({ game }, characters) {
   const _CHARACTERS = characters;
   const playerIds = Object.keys(game.players);
   const lastPlayerId = playerIds[playerIds.length - 1];
-  const firstLady = game.players[lastPlayerId];
+  // const firstLady = game.players[lastPlayerId];
 
-  _CHARACTERS.ladyOfTheLake = Object.assign({}, firstLady)
+  _CHARACTERS.ladyOfTheLake = +lastPlayerId;
 
   return _CHARACTERS; // async messes up players having roles at this point
 };
@@ -44,7 +44,7 @@ const numberOfPlayers = (state = 0, action) => {
 
 const characters = (state = DEFAULT_CHARACTERS, action) => {
   switch (action.type) {
-    case INITIALIZE_LADY: return setFirstLady(store.getState(), state);
+    case START_GAME: return setFirstLady(store.getState(), state);
     case TOGGLE_OPTIONAL: return Object.assign({}, state, {
       [action.character]: !state[action.character]
     });
