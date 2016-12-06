@@ -2,6 +2,7 @@ export const JOIN_GAME = 'JOIN_GAME';
 export const ADD_PLAYER_TO_GAME = 'ADD_PLAYER_TO_GAME';
 export const RECEIVE_GAMES = 'RECEIVE_GAMES';
 export const TOGGLE_OPTIONAL = 'TOGGLE_OPTIONAL';
+export const PLAY_LADY_CARD = 'PLAY_LADY_CARD';
 export const START_GAME = 'START_GAME';
 export const ADD_TO_TEAM = 'ADD_TO_TEAM';
 export const REMOVE_FROM_TEAM ='REMOVE_FROM_TEAM';

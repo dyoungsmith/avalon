@@ -3,7 +3,7 @@ import store from './store';
 /** Dummy zone  */
 import { receiveGames } from './reducers/games';
 import { joinGame } from './reducers/game';
-import { toggleOptional } from './reducers/game/rules';
+import { toggleOptional, playLadyCard } from './reducers/game/rules';
 import { addPlayerToGame } from './reducers/game/players';
 import { addToTeam, removeFromTeam, proposeTeam, voteOnTeam, scoreTeamVotes, voteOnQuest, scoreAndEndQuest } from './reducers/game/quests';
 /** End dummy zone */
@@ -115,6 +115,7 @@ store.dispatch(scoreAndEndQuest());
 store.dispatch(addToTeam(DUMMY_USERS[1]));
 store.dispatch(addToTeam(DUMMY_USERS[3]));
 store.dispatch(removeFromTeam(DUMMY_USERS[3]));
+store.dispatch(playLadyCard(DUMMY_USERS[3]));
 // store.dispatch(voteOnTeam(true)); // team.successVotes = 1
 // store.dispatch(scoreTeamVotes());
 // store.dispatch(voteOnQuest(true));

@@ -274,7 +274,7 @@ export default (state = DEFAULT_QUESTS, action) => {
 
 
     // Current quest's team
-    case ADD_TO_TEAM: return addPlayerToTeam(state, action.player);  // local
+    case ADD_TO_TEAM: return addPlayerToTeam(state, action.player);
     case REMOVE_FROM_TEAM: return removePlayerFromTeam(state, action.player);
     // case PROPOSE_TEAM: return Object.assign({}, state, {  // fb
     //   team: action.team
