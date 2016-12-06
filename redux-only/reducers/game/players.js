@@ -1,4 +1,4 @@
-import { _ } from 'underscore';
+import _ from 'lodash';
 import store from '../../store';
 import { ADD_PLAYER_TO_GAME, START_GAME } from '../../constants';
 

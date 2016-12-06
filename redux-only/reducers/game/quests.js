@@ -22,13 +22,15 @@ const DEFAULT_QUESTS = {
   4: DEFAULT_QUEST,
   5: DEFAULT_QUEST,
   currentQuest: 1,
+  currentLeader: 0,
   loyalScore: 0,
   evilScore: 0
 };
 
 // -------------------------- HELPERS --------------------------
-const five = [1, 2, 3, 4, 5];
-const initializeQuests = ({ game: { rules: { numberOfPlayers } } }) => {
+const initializeQuests = ({ game }) => {
+  const numberOfPlayers = game.rules.numberOfPlayers;
+  const five = [1, 2, 3, 4, 5];
   const _QUESTS = {};
   five.map(i => {
     switch (i) { // switch on quest number
@@ -108,6 +110,11 @@ const initializeQuests = ({ game: { rules: { numberOfPlayers } } }) => {
     }
   });
 
+  const playerIds = Object.keys(game.players);
+  const firstLeaderId = playerIds[0];
+
+  _QUESTS.currentLeader = +firstLeaderId;
+
   return Object.assign({}, DEFAULT_QUESTS, _QUESTS);
 };
 
@@ -134,6 +141,18 @@ function addVoteToTeam (quests, voteType) {
   });
 
   return _QUESTS;
+};
+
+function getNextLeader (game) {
+  // num = currIdx + 1; m = arr.length
+  const mod = (num, m) => ((num % m) + m) % m;
+  console.log('GAME???', game)
+  const playerIds = Object.keys(game.players);  // string IDs
+  const currLeaderId = game.quests.currentLeader; // num
+
+  console.log('IDS', playerIds, 'curr ID', currLeaderId);
+
+  return nextId;
 };
 
 function tallyTeamVotes (quests) {
@@ -167,7 +186,7 @@ function addVoteToQuests (quests, voteType) {
   return _QUESTS;
 };
 
-function tallyQuestAndContinue (quests) {
+function tallyQuestAndContinue ({ game }, quests) {
   const _QUESTS = Object.assign({}, quests);
   const _QNUMBER = _QUESTS.currentQuest;
   const _CURQUEST = _QUESTS[_QNUMBER];
@@ -180,6 +199,9 @@ function tallyQuestAndContinue (quests) {
   if (_QUESTS.currentQuest < 5) {
     _QUESTS.currentQuest = ++_QUESTS.currentQuest;
   };
+
+  console.log('GAME TO PASS', game)
+  getNextLeader(game);
 
   return _QUESTS;
 };
@@ -233,7 +255,7 @@ export default (state = DEFAULT_QUESTS, action) => {
 
     // Current quest
     case VOTE_ON_QUEST: return addVoteToQuests(state, action.voteType);
-    case SCORE_AND_END_QUEST: return tallyQuestAndContinue(state);
+    case SCORE_AND_END_QUEST: return tallyQuestAndContinue(store.getState(), state);
 
     default: return state;
   }

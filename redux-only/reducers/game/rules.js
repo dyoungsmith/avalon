@@ -17,7 +17,6 @@ function setFirstLady ({ game }, characters) {
   const _CHARACTERS = characters;
   const playerIds = Object.keys(game.players);
   const lastPlayerId = playerIds[playerIds.length - 1];
-  // const firstLady = game.players[lastPlayerId];
 
   _CHARACTERS.ladyOfTheLake = +lastPlayerId;
 
