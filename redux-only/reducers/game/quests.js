@@ -3,15 +3,17 @@ import { START_GAME, ADD_TO_TEAM, PROPOSE_TEAM, VOTE_ON_TEAM, SCORE_TEAM_VOTES, 
 
 
 // -------------------------- DEFAULTS --------------------------
+const DEFAULT_TEAM = {
+  successVotes: 0,
+  failVotes: 0
+};
+
 const DEFAULT_QUEST = {
   requiredPlayers: 0,   // === numberOfSuccessesNeeded
   numberOfFailsNeeded: 0,
   successVotes: 0,
   failVotes: 0,
-  team: {
-    successVotes: 0,
-    failVotes: 0
-  },
+  team: DEFAULT_TEAM,
   teamFails: 0
 };
 
@@ -143,32 +145,42 @@ function addVoteToTeam (quests, voteType) {
   return _QUESTS;
 };
 
-function getNextLeader (game) {
+function getNextLeaderId (game) {
   // num = currIdx + 1; m = arr.length
   const mod = (num, m) => ((num % m) + m) % m;
-  console.log('GAME???', game)
   const playerIds = Object.keys(game.players);  // string IDs
-  const currLeaderId = game.quests.currentLeader; // num
+  const currLeaderId = game.quests.currentLeader.toString();
+  const currLeaderIdx = playerIds.indexOf(currLeaderId);
+  const nextIdx = mod((currLeaderIdx + 1), playerIds.length);
+  const nextId = playerIds[nextIdx];
 
-  console.log('IDS', playerIds, 'curr ID', currLeaderId);
-
-  return nextId;
+  return +nextId;  // num
 };
 
-function tallyTeamVotes (quests) {
+function tallyTeamVotes ({ game }, quests) {
   const _QUESTS = Object.assign({}, quests);
   const _QNUMBER = _QUESTS.currentQuest;
+  const _CURQUEST = _QUESTS[_QNUMBER]; 
   const _CURTEAM = _QUESTS[_QNUMBER].team;
 
   const didSucceed = _CURTEAM.successVotes > _CURTEAM.failVotes;
 
   if (!didSucceed) {
     _QUESTS[_QNUMBER].teamFails = ++_QUESTS[_QNUMBER].teamFails;
-    // move to next leader, reset team
-    // if teamFails === 5, evil wins!
-  };
-  
-  _QUESTS[_QNUMBER].team = Object.assign({}, _CURTEAM, { didSucceed });
+    if (_QUESTS[_QNUMBER].teamFails >= 5) {
+      console.log('GAME OVER! EVIL WINS');
+    }
+    else {
+      const nextLeaderId = getNextLeaderId(game);
+      _QUESTS.currentLeader = nextLeaderId;
+      _QUESTS[_QNUMBER] = Object.assign({}, _CURQUEST, {
+        team: DEFAULT_TEAM
+      });
+    }
+  }
+  else {
+    _QUESTS[_QNUMBER].team = Object.assign({}, _CURTEAM, { didSucceed });
+  }
 
   return _QUESTS;
 };
@@ -198,10 +210,9 @@ function tallyQuestAndContinue ({ game }, quests) {
   
   if (_QUESTS.currentQuest < 5) {
     _QUESTS.currentQuest = ++_QUESTS.currentQuest;
+    const nextLeaderId = getNextLeaderId(game);
+    _QUESTS.currentLeader = nextLeaderId;
   };
-
-  console.log('GAME TO PASS', game)
-  getNextLeader(game);
 
   return _QUESTS;
 };
@@ -250,7 +261,7 @@ export default (state = DEFAULT_QUESTS, action) => {
     //   team: action.team
     // });
     case VOTE_ON_TEAM: return addVoteToTeam(state, action.voteType);
-    case SCORE_TEAM_VOTES: return tallyTeamVotes(state);
+    case SCORE_TEAM_VOTES: return tallyTeamVotes(store.getState(), state);
 
 
     // Current quest
