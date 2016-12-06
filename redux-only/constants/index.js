@@ -4,6 +4,7 @@ export const RECEIVE_GAMES = 'RECEIVE_GAMES';
 export const TOGGLE_OPTIONAL = 'TOGGLE_OPTIONAL';
 export const START_GAME = 'START_GAME';
 export const ADD_TO_TEAM = 'ADD_TO_TEAM';
+export const REMOVE_FROM_TEAM ='REMOVE_FROM_TEAM';
 export const PROPOSE_TEAM = 'PROPOSE_TEAM';
 export const VOTE_ON_TEAM = 'VOTE_ON_TEAM';
 export const SCORE_TEAM_VOTES = 'SCORE_TEAM_VOTES';
