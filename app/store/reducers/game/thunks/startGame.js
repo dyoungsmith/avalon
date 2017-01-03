@@ -22,7 +22,7 @@ export default () => (dispatch, getState) => {
     quest3,
     quest4,
     quest5
-  ]= initializeQuests(numPlayers);
+  ] = initializeQuests(numPlayers);
 
   const characters = assignCharacters(playerIds);
 

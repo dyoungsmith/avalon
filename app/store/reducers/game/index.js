@@ -29,13 +29,14 @@ export const updateGame = gameFromFirebase => {
     type: UPDATE_GAME,
     game
   };
-}
+};
 
 export { default as createGame } from './thunks/createGame';
 export { default as joinGame } from './thunks/joinGame';
-export { default as removeFromQuest } from './thunks/removeFromQuest';
 export { default as startGame } from './thunks/startGame';
 export { default as takeOnQuest } from './thunks/takeOnQuest';
+export { default as removeFromQuest } from './thunks/removeFromQuest';
+export { default as proposeTeam } from './thunks/proposeTeam';
 
 export default function (state = DEFAULT_GAME, action) {
   switch (action.type) {

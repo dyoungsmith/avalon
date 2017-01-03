@@ -38,7 +38,7 @@ export default ({
       <h3>Commands</h3>
       <div className="flex flex-column">
       {
-        hostId === userId && status === 'PREGAME' &&
+        hostId === userId && status === 'PREGAME' && !unableToStart
         <div>
           {/*
           <div style={hide}>
@@ -72,11 +72,8 @@ export default ({
         </div>
       }
       {
-        status === 'QUESTVOTE' &&
-        <div>
-          <button className="btn btn-success" style={margin}>Succeed</button>
-          <button className="btn btn-danger" style={margin}>Fail</button>
-        </div>
+        status === 'TEAMMAKE' && myTurn && teamIsFull &&
+        <button className="btn btn-primary" style={margin} onClick={handleProposeTeam}>Propose Team</button>
       }
       {
         status === 'TEAMVOTE' &&
@@ -86,8 +83,11 @@ export default ({
         </div>
       }
       {
-        status === 'TEAMMAKE' && myTurn && teamIsFull &&
-        <button className="btn btn-primary" style={margin} onClick={handleProposeTeam}>Propose Team</button>
+        status === 'QUESTVOTE' &&
+        <div>
+          <button className="btn btn-success" style={margin}>Succeed</button>
+          <button className="btn btn-danger" style={margin}>Fail</button>
+        </div>
       }
       </div>
     </div>

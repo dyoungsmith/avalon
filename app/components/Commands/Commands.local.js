@@ -32,6 +32,8 @@ export default class CommandsLocal extends Component {
     this.props.startGame(numPlayers, this.props.gameId);
   }
 
+  // handleProposeTeam with necessary values
+
   render () {
     return (
       <CommandsView {...this.state} {...this.props} {...this.methods} />

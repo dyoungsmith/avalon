@@ -38,12 +38,15 @@ export default ({
 
   return (
     <div key={idx} style={_style}>
-      <p>Quest {idx}</p>
+      <p>Quest {idx + 1}</p>
       {
         requiredPlayers &&
         <div>
           <div>{requiredPlayers} heroes needed</div>
-          <div>{numberOfFailsNeeded} fails</div>
+          <div>{numberOfFailsNeeded > 1
+            ? `${numberOfFailsNeeded} fails`
+            : `${numberOfFailsNeeded} fail`}
+          </div>
         </div>
       }
     </div>
