@@ -31,7 +31,7 @@ export default connect(
   dispatch => ({
     startGame: (numPlayers, gameId) =>
       dispatch(startGame(numPlayers, gameId)),
-    handleProposeTeam: () =>
-      dispatch(proposeTeam())
+    handleProposeTeam: (gameId) =>
+      dispatch(proposeTeam(gameId))
   })
 )(CommandsLocal);

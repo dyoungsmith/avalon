@@ -16,7 +16,8 @@ export default class CommandsLocal extends Component {
 
     this.methods = {
       handleChange: this.handleChange.bind(this),
-      handleStartGame: this.handleStartGame.bind(this)
+      handleStartGame: this.handleStartGame.bind(this),
+      handleProposeTeam: this.handleProposeTeam.bind(this)
     };
   }
 
@@ -33,6 +34,9 @@ export default class CommandsLocal extends Component {
   }
 
   // handleProposeTeam with necessary values
+  handleProposeTeam () {
+    this.props.proposeTeam(this.props.gameId);
+  }
 
   render () {
     return (

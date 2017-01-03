@@ -2,8 +2,7 @@
 
 import db from '../../../../db';
 
-export default (getState) => {
-	const { game: { gameId } } = getState();
-
+export default (gameId) => {
+	console.log('GAMEID', gameId);
 	db.ref(`games/${gameId}`).update({status: 'TEAMVOTE'});
 };
