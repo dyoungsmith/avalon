@@ -38,7 +38,7 @@ export default ({
       <h3>Commands</h3>
       <div className="flex flex-column">
       {
-        hostId === userId && status === 'PREGAME' && !unableToStart
+        hostId === userId && status === 'PREGAME' && !unableToStart &&
         <div>
           {/*
           <div style={hide}>
